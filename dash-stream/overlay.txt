@@ -1,0 +1,4 @@
+PKG-TIME : %{localtime:%H}:%{localtime:%M}:%{localtime:%S}:%{eif:1M*t-1K*trunc(t*1K):d}
+PKG-PTS  :%{pts:hms:0:24HH}
+PKG-FRAME: %{frame_num}
+SIZE     : %{metadata:title}

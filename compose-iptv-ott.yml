@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  origin-server:
+    build:
+      context: .
+      target: http-server
+    ports:
+      - "8080:8080"
+
+  ll-source-1:
+    build:
+      context: .
+      target: ll-source
+    command: -p 1201 -i content/moto.ts
+
+  ll-source-2:
+    build:
+      context: .
+      target: ll-source
+    command: -p 1202 -i content/soccer.ts
+
+  ll-stream-1:
+    build:
+      context: .
+      target: ll-dash
+      args:
+        LOCAL_IP: localhost
+    command: -i 233.0.0.1:1201 --origin http://origin-server:8080/live-1/manifest.mpd --segment-duration 2 --gop 60 --preset fast
+    links:
+      - ll-source-1
+      - origin-server
+
+  ll-stream-2:
+    build:
+      context: .
+      target: ll-dash
+      args:
+        LOCAL_IP: localhost
+    command: -i 233.0.0.1:1202 --origin http://origin-server:8080/live-2/manifest.mpd --segment-duration 2 --gop 60 --preset fast
+    links:
+      - ll-source-2
+      - origin-server
+
+
+  

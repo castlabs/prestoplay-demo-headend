@@ -1,0 +1,11 @@
+.idea
+bin/
+data/
+http-origin/bin
+
+media/*
+!media/README.md
+
+content/*
+!content/README.md
+

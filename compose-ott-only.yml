@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  origin-server:
+    build:
+      context: .
+      target: http-server
+    command: -l 750
+    ports:
+      - "8080:8080"
+
+  ll-stream-1:
+    build:
+      context: .
+      target: ll-dash
+      args:
+        LOCAL_IP: localhost
+    command: --ott -i content/moto.ts --origin http://origin-server:8080/live-1/manifest.mpd --segment-duration 2 --gop 60 --tune zerolatency --preset superfast
+    links:
+      - origin-server
+
+  ll-stream-2:
+    build:
+      context: .
+      target: ll-dash
+      args:
+        LOCAL_IP: localhost
+    command: --ott -i content/soccer.ts --origin http://origin-server:8080/live-2/manifest.mpd --segment-duration 2 --gop 60 --tune zerolatency --preset superfast
+    links:
+      - origin-server
